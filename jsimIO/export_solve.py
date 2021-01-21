@@ -24,8 +24,6 @@ def write_jsimg(sim_element):
     filepath = os.path.join(path_folder, filename)
 
     NSMAP = {"xsi": "http://www.w3.org/2001/XMLSchema-instance"}
-    # TODO controllo ha estensione? DA AGGIUSTARE ALLA FINE
-
     archive = ET.Element("archive", nsmap=NSMAP)  # * archive
     archive.attrib["name"] = filename
     attr_qname = ET.QName(
