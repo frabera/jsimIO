@@ -33,21 +33,15 @@ class Exp(Distribution):
     def get_elements_list(self):
         elements = []
         elements.append(ET.Element("subParameter",
-                                   {
-                                       "classPath": "jmt.engine.random.Exponential",
-                                       "name": "Exponential"
-                                   }))
+                                   classPath="jmt.engine.random.Exponential",
+                                   name="Exponential"))
         el2 = ET.Element("subParameter",
-                         {
-                             "classPath": "jmt.engine.random.ExponentialPar",
-                             "name": "distrPar"
-                         })
+                         classPath="jmt.engine.random.ExponentialPar",
+                         name="distrPar")
         elements.append(el2)
         el2a = ET.SubElement(el2, "subParameter",
-                             {
-                                 "classPath": "java.lang.Double",
-                                 "name": "lambda"}
-                             )
+                             classPath="java.lang.Double",
+                             name="lambda")
         el2a1 = ET.SubElement(el2a, "value")
         el2a1.text = str(float(self.lambda_))
         return elements
