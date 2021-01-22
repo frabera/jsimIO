@@ -14,3 +14,9 @@ class Default:
         "-seed": 1,
         "-maxtime": 60
     }
+
+
+class Id:
+    Queue = 0
+    Server = 1
+    Router = 2

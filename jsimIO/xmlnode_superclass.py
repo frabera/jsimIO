@@ -6,3 +6,8 @@ class XmlNode():
             self._children = _children
         else:
             self._children = []
+        self._attributes = {}
+        self._element = None
+
+    def add_child(self, obj):
+        self._children.append(obj)
