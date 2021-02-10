@@ -6,7 +6,7 @@ Downlad the [JMT standalone executable](http://sourceforge.net/projects/jmt/file
 
 ## Output files
 
-Each simulation run creates automatically a folder in the script path used to run it (if no path is specified) named:
+Each simulation run creates automatically a folder in the script path used to run it ~~(if no path is specified)~~ named:
 
     modelname_date_time/
 

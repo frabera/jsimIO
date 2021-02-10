@@ -4,14 +4,15 @@ from enum import Enum
 # Scheduling
 
 
-class SchedStrategy(Enum):
+# class SchedStrategy(Enum):
+class SchedStrategy:
     FCFS = 1
 
 
 # Service
 
 
-class ServiceStrategy(XmlNode, Enum):
+class ServiceStrategy(_XmlNode, Enum):
     # Load Independent
     ServiceTimeStrategy = 1
 

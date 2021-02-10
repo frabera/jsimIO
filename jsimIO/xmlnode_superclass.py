@@ -1,4 +1,4 @@
-class XmlNode():
+class _XmlNode():
     def __init__(self, _tag, _children=None):
         self._tag = _tag
         if _children:  # dict mi va bene?

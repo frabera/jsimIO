@@ -41,12 +41,10 @@ def write_jsimg(sim_element):
 
 def solve_jsimg(path):
     ret = subprocess.run(
-        ["java", "-cp", "JMT.jar", "jmt.commandline.Jmt", "sim", path],
-        capture_output=True)
-    # ret = subprocess.run(
-    #    ["java", "-cp", "JMT.jar", "jmt.commandline.Jmt",
-    #        "sim", path, "--illegal-access=permit"],
-    #    capture_output = True)
+        [
+            "java", "-cp", "JMT.jar", "jmt.commandline.Jmt", "sim", path,
+            # "--illegal-access=permit"
+        ], capture_output=True)
 
     if ret.stderr.startswith(b"[Error]"):
         print(ret.stderr.decode())
