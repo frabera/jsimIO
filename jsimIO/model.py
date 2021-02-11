@@ -1,3 +1,4 @@
+from jsimIO.nodes import _Node
 import os
 import subprocess
 from datetime import datetime
@@ -5,18 +6,53 @@ from datetime import datetime
 from lxml import etree as ET
 
 from .defaults import *
-from .xmlnode_superclass import *
+from .xmlnode_superclass import _XmlNode
 
 
 class Model(_XmlNode):
     def __init__(self, name, options=Default.ModelOptions):
-        self.options = options
         super().__init__("sim")
+        self._name = name  # PRIVATO PERCHè SE NO MI FINISCE NEGLI ATTRIBUTI
+        #  self.options = options O IN ALTERNATIVA:
+        for key in options:
+            setattr(self, key, options[key])
+        self.set_attributes(self.get_classattributes_asdict())
 
-    def write_jsimg(self, sim_element):
+    def get_nodes(self):
+        return [child for child in self._children if isinstance(child, _Node)]
+
+    def set_routing(self, matrices, fill_loggers=False):
+        def normalize(matrix):
+            for row in matrix:
+                sum_row = sum(row)
+                if sum_row:
+                    for elem in row:
+                        elem = elem/sum_row
+            return matrix
+
+        for matrix in matrices:
+            normalize(matrix)
+
+        # Add connections
+        stations = [node for node in self._children if type(node) in [
+            "jsimIO.nodes.Source"]]
+        for matrix in matrices:
+            for i in range(len(matrix)):
+                for j in matrix[i]:
+                    if matrix[i][j] is not 0:
+                        source = self.get_nodes()[i].name
+                        target = self.get_nodes()[j].name
+                        self.add_child(_XmlNode("connection", attributes={
+                                       "source": source, "target": target}))
+
+        # Add routing
+    # def write_jsimg(self, sim_element):
+
+    def write_jsimg(self):
+        sim_element = self._element
         now = datetime.now().strftime("%Y%m%d-%H%M%S")
         cwd = os.getcwd()
-        modelname = sim_element.attrib["name"]
+        modelname = self._name
         folder = f"{modelname}_{now}"
         path_folder = os.path.join(cwd, folder)
 

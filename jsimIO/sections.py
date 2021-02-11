@@ -1,35 +1,42 @@
-from .xmlnode_superclass import *
+from .xmlnode_superclass import _XmlNode
 
 
 class _Section(_XmlNode):
-    def __init__(self, model, name, className):
+    def __init__(self, className):
         super().__init__("section")
-        self.model = model
-        self.name = name
         self.className = className
+        self.set_attributes(self.get_classattributes_asdict())
 
 
 #  STATION
 class _Queue(_Section):  # is a section
-    def __init__(self, model, name, scheduling_strategy=None):
-        super().__init__(model, name, "Queue")
+    def __init__(self, scheduling_strategy, buffer_size, drop_strategy):
+        super().__init__("Queue")
         self.scheduling_strategy = scheduling_strategy
+        val = _XmlNode("value", text=buffer_size)
+        self.add_child(_XmlNode("parameter", attributes={
+                       "classPath": "java.lang.Integer", "name": "size"}, children=[val]))
 
 
 class _Server(_Section):
-    def __init__(self, model, name, service_strategy=None):
-        super().__init__(model, name, "Server")
+    def __init__(self, service_strategy=None):
+        super().__init__("Server")
         self.service_strategy = service_strategy
 
 
 class _Router(_Section):
-    def __init__(self, model, name, routing_strategy=None):
-        super().__init__(model, name, "Router")
+    def __init__(self, routing_strategy=None):
+        super().__init__("Router")
         self.routing_strategy = routing_strategy
 
 
 #  SOURCE
-
+# RandomSource
+# ServiceTunnel
+class _ServiceTunnel(_Section):
+    def __init__(self):
+        super().__init__("ServiceTunnel")
+# Router
 
 #  SINK
 

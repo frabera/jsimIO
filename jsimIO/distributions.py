@@ -1,5 +1,5 @@
 import lxml.etree as ET
-from .xmlnode_superclass import *
+from .xmlnode_superclass import _XmlNode
 
 
 class _Distribution(_XmlNode):

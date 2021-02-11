@@ -17,6 +17,12 @@ class Default:
 
 
 class Id:
-    Queue = 0
-    Server = 1
-    Router = 2
+    class Station:
+        Queue = 0
+        Server = 1
+        Router = 2
+    
+    class Source:
+        RandomSource = 0
+        ServiceTunnel = 1
+        Router = 2
