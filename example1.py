@@ -3,7 +3,7 @@ from jsimIO import *
 
 
 # Create a Model instance
-model = Model("asd")
+model = Model("Example1")
 
 # Create network nodes
 source = Source(model, "Source")  # 1
@@ -35,17 +35,10 @@ routing_matrices = [
 
 model.set_routing(routing_matrices)
 
-# source.route(class1, queue1, 1)
-
 # Export and run
-
-# %%
-
 baked_model = bake(model)
 print(ET.tostring(baked_model._element, pretty_print=True).decode())
 
-baked_model.write_jsimg()
-
-# %%
-
-# %%
+path = baked_model.write_jsimg()
+ret = baked_model.solve_jsimg(path)
+print(ret)

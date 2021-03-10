@@ -1,5 +1,5 @@
 from .xmlnode_superclass import _XmlNode
-import lxml.etree as ET
+# import lxml.etree as ET
 from .defaults import *
 
 
@@ -10,14 +10,19 @@ class _UserClass(_XmlNode):
         self.reference_station = reference_station
         self.type = type
         self.priority = priority
-        model.add_child(self)
+
+        # addchildqui
 
         # POST
         attribute_dict = self.get_classattributes_asdict()
         attribute_dict.pop("distribution", None)
         attribute_dict.pop("reference_station")
-        attribute_dict.update({"referenceStation": reference_station})
+        # attribute_dict.update({"referenceStation": reference_station})
+        # ! Source o station? per openclass in source è source
+        attribute_dict.update({"referenceSource": reference_station})
         self.set_attributes(attribute_dict)
+
+        model.add_child(self)
 
 
 class _ClosedClass(_UserClass):  # da distribuire i parametri

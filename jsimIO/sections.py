@@ -1,5 +1,5 @@
 from .xmlnode_superclass import _XmlNode
-from .userclasses import _UserClass
+# from .userclasses import _UserClass
 
 
 class _Section(_XmlNode):

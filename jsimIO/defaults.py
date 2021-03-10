@@ -4,7 +4,7 @@ class Default:
         "logDecimalSeparator": ".",
         "logDelimiter": ",",
         "logReplaceMode": "0",
-        "logpath": "",
+        "logPath": "",
         "maxEvents": "-1",
         "maxSamples": "1000000",
         "polling": "1.0"
@@ -21,7 +21,7 @@ class Id:
         Queue = 0
         Server = 1
         Router = 2
-    
+
     class Source:
         RandomSource = 0
         ServiceTunnel = 1
