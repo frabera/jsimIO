@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='ISO-8859-1' standalone='no'?>
 <archive xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Example1-input.jsimg" xsi:noNamespaceSchemaLocation="Archive.xsd">
-    <sim name="Example1" disableStatisticStop="false" logDecimalSeparator="." logDelimiter="," logReplaceMode="0" logPath="" maxEvents="-1" maxSamples="1000000" polling="1.0" xsi:noNamespaceSchemaLocation="SIMmodeldefinition.xsd">
+    <sim name="Example1" disableStatisticStop="false" logDecimalSeparator="." logDelimiter="," logReplaceMode="0" logPath="c:\Users\Francesco\Desktop\jsimIO\Example1_20210319-154856" maxEvents="-1" maxSamples="1000000" polling="1.0" xsi:noNamespaceSchemaLocation="SIMmodeldefinition.xsd">
         <userClass name="Class1" type="open" priority="0" referenceSource="Source"/>
         <userClass name="Class2" type="open" priority="0" referenceSource="Source"/>
         <node name="Source">
@@ -34,7 +34,7 @@
                         <subParameter array="true" classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntryArray">
                             <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
                                 <subParameter classPath="java.lang.String" name="stationName">
-                                    <value>M1</value>
+                                    <value>LOG_M1</value>
                                 </subParameter>
                                 <subParameter classPath="java.lang.Double" name="probability">
                                     <value>1.0</value>
@@ -47,7 +47,7 @@
                         <subParameter array="true" classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntryArray">
                             <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
                                 <subParameter classPath="java.lang.String" name="stationName">
-                                    <value>M1</value>
+                                    <value>LOG_M1</value>
                                 </subParameter>
                                 <subParameter classPath="java.lang.Double" name="probability">
                                     <value>1.0</value>
@@ -60,6 +60,70 @@
         </node>
         <node name="Sink">
             <section className="JobSink"/>
+        </node>
+        <node name="LOG_Sink">
+            <section className="Queue">
+                <parameter classPath="java.lang.Integer" name="size">
+                    <value>-1</value>
+                </parameter>
+                <parameter array="true" classPath="java.lang.String" name="dropStrategies">
+                    <refClass>Class1</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>BAS blocking</value>
+                    </subParameter>
+                    <refClass>Class2</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>BAS blocking</value>
+                    </subParameter>
+                </parameter>
+                <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy">
+                    <refClass>Class1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Class2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                </parameter>
+            </section>
+            <section className="LogTunnel">
+                <parameter classPath="java.lang.String" name="logfileName">
+                    <value>global.csv</value>
+                </parameter>
+                <parameter classPath="java.lang.String" name="logfilePath">
+                    <value>c:\Users\Francesco\Desktop\jsimIO\Example1_20210319-154856</value>
+                </parameter>
+                <parameter classPath="java.lang.Boolean" name="logExecTimestamp">
+                    <value>true</value>
+                </parameter>
+                <parameter classPath="java.lang.Boolean" name="logLoggerName">
+                    <value>true</value>
+                </parameter>
+                <parameter classPath="java.lang.Boolean" name="logTimeStamp">
+                    <value>true</value>
+                </parameter>
+                <parameter classPath="java.lang.Boolean" name="logJobID">
+                    <value>true</value>
+                </parameter>
+                <parameter classPath="java.lang.Boolean" name="logJobClass">
+                    <value>true</value>
+                </parameter>
+                <parameter classPath="java.lang.Boolean" name="logTimeSameClass">
+                    <value>true</value>
+                </parameter>
+                <parameter classPath="java.lang.Boolean" name="logTimeAnyClass">
+                    <value>true</value>
+                </parameter>
+                <parameter classPath="java.lang.Integer" name="numClasses">
+                    <value>2</value>
+                </parameter>
+            </section>
+            <section className="Router">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
+                    <refClass>Class1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Class2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                </parameter>
+            </section>
         </node>
         <node name="M1">
             <section className="Queue">
@@ -129,7 +193,7 @@
                         <subParameter array="true" classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntryArray">
                             <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
                                 <subParameter classPath="java.lang.String" name="stationName">
-                                    <value>Sink</value>
+                                    <value>LOG_Sink</value>
                                 </subParameter>
                                 <subParameter classPath="java.lang.Double" name="probability">
                                     <value>1.0</value>
@@ -142,7 +206,7 @@
                         <subParameter array="true" classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntryArray">
                             <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
                                 <subParameter classPath="java.lang.String" name="stationName">
-                                    <value>Sink</value>
+                                    <value>LOG_Sink</value>
                                 </subParameter>
                                 <subParameter classPath="java.lang.Double" name="probability">
                                     <value>1.0</value>
@@ -153,8 +217,74 @@
                 </parameter>
             </section>
         </node>
+        <node name="LOG_M1">
+            <section className="Queue">
+                <parameter classPath="java.lang.Integer" name="size">
+                    <value>-1</value>
+                </parameter>
+                <parameter array="true" classPath="java.lang.String" name="dropStrategies">
+                    <refClass>Class1</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>BAS blocking</value>
+                    </subParameter>
+                    <refClass>Class2</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>BAS blocking</value>
+                    </subParameter>
+                </parameter>
+                <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy">
+                    <refClass>Class1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Class2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                </parameter>
+            </section>
+            <section className="LogTunnel">
+                <parameter classPath="java.lang.String" name="logfileName">
+                    <value>global.csv</value>
+                </parameter>
+                <parameter classPath="java.lang.String" name="logfilePath">
+                    <value>c:\Users\Francesco\Desktop\jsimIO\Example1_20210319-154856</value>
+                </parameter>
+                <parameter classPath="java.lang.Boolean" name="logExecTimestamp">
+                    <value>true</value>
+                </parameter>
+                <parameter classPath="java.lang.Boolean" name="logLoggerName">
+                    <value>true</value>
+                </parameter>
+                <parameter classPath="java.lang.Boolean" name="logTimeStamp">
+                    <value>true</value>
+                </parameter>
+                <parameter classPath="java.lang.Boolean" name="logJobID">
+                    <value>true</value>
+                </parameter>
+                <parameter classPath="java.lang.Boolean" name="logJobClass">
+                    <value>true</value>
+                </parameter>
+                <parameter classPath="java.lang.Boolean" name="logTimeSameClass">
+                    <value>true</value>
+                </parameter>
+                <parameter classPath="java.lang.Boolean" name="logTimeAnyClass">
+                    <value>true</value>
+                </parameter>
+                <parameter classPath="java.lang.Integer" name="numClasses">
+                    <value>2</value>
+                </parameter>
+            </section>
+            <section className="Router">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
+                    <refClass>Class1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Class2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                </parameter>
+            </section>
+        </node>
         <measure alpha="0.01" name="System Throughput" nodeType="" precision="0.03" referenceNode="" referenceUserClass="" type="System Throughput" verbose="false"/>
-        <connection source="Source" target="M1"/>
-        <connection source="M1" target="Sink"/>
+        <connection source="LOG_Sink" target="Sink"/>
+        <connection source="M1" target="LOG_Sink"/>
+        <connection source="Source" target="LOG_M1"/>
+        <connection source="LOG_M1" target="M1"/>
     </sim>
 </archive>
