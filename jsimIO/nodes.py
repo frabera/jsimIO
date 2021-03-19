@@ -81,4 +81,53 @@ class _Sink(_Node):
 
 class _Logger(_Node):
     def __init__(self, model, name):
+        super.__init__(model)
+        self.name = name
         self.set_attributes({"name": self.name})
+        # DA RIVEDERE I PARAMETRI
+        queue = self.add_child(_Queue("DA RIFARE", -1, "BAS Blocking"))
+        drop_strategy = node_E.get_child(0).add_child(
+            _XmlNode("parameter",
+                     attributes={
+                         "array": "true",
+                         "classPath": "java.lang.String",
+                         "name": "dropStrategies"}))
+        node_E.get_child(0).add_child(  # get queue strategy
+            _XmlNode("parameter",
+                     attributes={
+                         "classPath": "jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy",
+                         "name": "FCFSstrategy"}))
+        put_queue_strategy = node_E.get_child(0).add_child(
+            _XmlNode("parameter",
+                     attributes={
+                         "array": "true",
+                         "classPath": "jmt.engine.NetStrategies.QueuePutStrategy",
+                         "name": "QueuePutStrategy"}))
+
+        #  ! verificare che array sia true anche se una sola classe
+        #  ! verificare se devo inserire solo le classi che passano
+        #  ! dalla stazione o le posso mettere tutte
+        for uc_index, userclass in enumerate(model.userclasses):
+            # L'userclass passa dalla stazione
+            # if sum(model.matrices[uc_index][node_index]) > 0:
+            # se rimetto l'if va indentato +1
+            # vuole dropstrategy per tutte le classi
+
+            # DROP STRATEGY
+            drop_strategy.add_child(
+                _XmlNode("refClass", text=userclass.name))
+            sub_par = drop_strategy.add_child(
+                _XmlNode("subParameter",
+                         attributes={"classPath": "java.lang.String",
+                                     "name": "dropStrategy"}))
+            sub_par.add_child(
+                _XmlNode("value", text=node.dropstrategy))
+
+            # QUEUE STRATEGY
+            put_queue_strategy.add_child(
+                _XmlNode("refClass", text=userclass.name))
+            put_queue_strategy.add_child(
+                _XmlNode("subParameter",
+                         attributes={
+                             "classPath": "jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy",
+                             "name": "TailStrategy"}))

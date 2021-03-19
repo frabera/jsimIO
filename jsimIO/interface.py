@@ -1,3 +1,4 @@
+from os.path import join
 from .defaults import Default
 from dataclasses import dataclass
 from .distributions import _Distribution
@@ -134,10 +135,14 @@ def link_classes_and_nodes(model):
             if userclass.reference_station is node]
 
 
-def bake(model, fill_loggers=False):
+def add_logger(baked_model, node):
+    baked_model.add_child(_Logger(baked_model, f"LOG_{node.name}"))
+
+
+def bake(model, fill_loggers=True):
 
     link_classes_and_nodes(model)
-    baked_model = _Model(model.name, options=model.options)
+    baked_model = _Model(model, options=model.options)
 
     # Add userclasses TAGS
     for userclass in model.userclasses:
@@ -180,6 +185,84 @@ def bake(model, fill_loggers=False):
 
         elif isinstance(node, Sink):
             node_E = baked_model.add_child(_Sink(model, node.name))
+
+            # Logger
+            logger_node = baked_model.add_child(
+                _XmlNode("node", attributes={"name": f"LOG_{node.name}"}))
+            queue_section = logger_node.add_child(
+                _XmlNode("section", attributes={"className": "Queue"}))
+            size = queue_section.add_child(_XmlNode("parameter", attributes={
+                                           "classPath": "java.lang.Integer", "name": "size"}))
+            size.add_child(_XmlNode("value", text=-1))
+            drop_strategy = queue_section.add_child(_XmlNode("parameter", attributes={
+                "array": "true",
+                "classPath": "java.lang.String",
+                "name": "dropStrategies"
+            }))
+            queue_section.add_child(  # get queue strategy
+                _XmlNode("parameter",
+                         attributes={
+                             "classPath": "jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy",
+                             "name": "FCFSstrategy"}))
+            put_queue_strategy = queue_section.add_child(
+                _XmlNode("parameter",
+                         attributes={
+                             "array": "true",
+                             "classPath": "jmt.engine.NetStrategies.QueuePutStrategy",
+                             "name": "QueuePutStrategy"}))
+            for userclass in model.userclasses:
+                drop_strategy.add_child(
+                    _XmlNode("refClass", text=userclass.name))
+                sub_par = drop_strategy.add_child(
+                    _XmlNode("subParameter",
+                             attributes={"classPath": "java.lang.String",
+                                         "name": "dropStrategy"}))
+                sub_par.add_child(
+                    _XmlNode("value", text="BAS blocking"))
+
+                # QUEUE STRATEGY
+                put_queue_strategy.add_child(
+                    _XmlNode("refClass", text=userclass.name))
+                put_queue_strategy.add_child(
+                    _XmlNode("subParameter",
+                             attributes={
+                                 "classPath": "jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy",
+                                 "name": "TailStrategy"}))
+
+            logtunnel_section = logger_node.add_child(
+                _XmlNode("section", attributes={"className": "LogTunnel"}))
+            logtunnel_section.add_child(_XmlNode("parameter", children=[_XmlNode("value", text="global.csv")], attributes={
+                "classPath": "java.lang.String",
+                "name": "logfileName"
+            }))
+            logtunnel_section.add_child(_XmlNode("parameter", children=[_XmlNode("value", text=baked_model.path_folder)], attributes={
+                "classPath": "java.lang.String",
+                "name": "logfilePath"
+            }))
+            for bool_param in ["logExecTimestamp", "logLoggerName", "logTimeStamp", "logJobID", "logJobClass", "logTimeSameClass", "logTimeAnyClass"]:
+                logtunnel_section.add_child(_XmlNode("parameter", children=[_XmlNode("value", text="true")], attributes={
+                    "classPath": "java.lang.Boolean",
+                    "name": bool_param
+                }))
+            logtunnel_section.add_child(_XmlNode("parameter", children=[_XmlNode("value", text=len(model.userclasses))], attributes={
+                "classPath": "java.lang.Integer",
+                "name": "numClasses"
+            }))
+
+            router_section = logger_node.add_child(
+                _XmlNode("section", attributes={"className": "Router"}))
+            routing_strategy = router_section.add_child(_XmlNode("parameter", attributes={
+                "array": "true",
+                "classPath": "jmt.engine.NetStrategies.RoutingStrategy",
+                "name": "RoutingStrategy"
+            }))
+            for userclass in model.userclasses:
+                routing_strategy.add_child(
+                    _XmlNode("refClass", text=userclass.name))
+                routing_strategy.add_child(_XmlNode("subParameter", attributes={
+                    "classPath": "jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy",
+                    "name": "Random"
+                }))
 
         #  ! random source per ogni nodo
 
@@ -285,6 +368,84 @@ def bake(model, fill_loggers=False):
                 for elem in distribution_parameters_list:
                     timestrategy._element.append(elem)
 
+            # Logger
+            logger_node = baked_model.add_child(
+                _XmlNode("node", attributes={"name": f"LOG_{node.name}"}))
+            queue_section = logger_node.add_child(
+                _XmlNode("section", attributes={"className": "Queue"}))
+            size = queue_section.add_child(_XmlNode("parameter", attributes={
+                                           "classPath": "java.lang.Integer", "name": "size"}))
+            size.add_child(_XmlNode("value", text=-1))
+            drop_strategy = queue_section.add_child(_XmlNode("parameter", attributes={
+                "array": "true",
+                "classPath": "java.lang.String",
+                "name": "dropStrategies"
+            }))
+            queue_section.add_child(  # get queue strategy
+                _XmlNode("parameter",
+                         attributes={
+                             "classPath": "jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy",
+                             "name": "FCFSstrategy"}))
+            put_queue_strategy = queue_section.add_child(
+                _XmlNode("parameter",
+                         attributes={
+                             "array": "true",
+                             "classPath": "jmt.engine.NetStrategies.QueuePutStrategy",
+                             "name": "QueuePutStrategy"}))
+            for userclass in model.userclasses:
+                drop_strategy.add_child(
+                    _XmlNode("refClass", text=userclass.name))
+                sub_par = drop_strategy.add_child(
+                    _XmlNode("subParameter",
+                             attributes={"classPath": "java.lang.String",
+                                         "name": "dropStrategy"}))
+                sub_par.add_child(
+                    _XmlNode("value", text="BAS blocking"))
+
+                # QUEUE STRATEGY
+                put_queue_strategy.add_child(
+                    _XmlNode("refClass", text=userclass.name))
+                put_queue_strategy.add_child(
+                    _XmlNode("subParameter",
+                             attributes={
+                                 "classPath": "jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy",
+                                 "name": "TailStrategy"}))
+
+            logtunnel_section = logger_node.add_child(
+                _XmlNode("section", attributes={"className": "LogTunnel"}))
+            logtunnel_section.add_child(_XmlNode("parameter", children=[_XmlNode("value", text="global.csv")], attributes={
+                "classPath": "java.lang.String",
+                "name": "logfileName"
+            }))
+            logtunnel_section.add_child(_XmlNode("parameter", children=[_XmlNode("value", text=baked_model.path_folder)], attributes={
+                "classPath": "java.lang.String",
+                "name": "logfilePath"
+            }))
+            for bool_param in ["logExecTimestamp", "logLoggerName", "logTimeStamp", "logJobID", "logJobClass", "logTimeSameClass", "logTimeAnyClass"]:
+                logtunnel_section.add_child(_XmlNode("parameter", children=[_XmlNode("value", text="true")], attributes={
+                    "classPath": "java.lang.Boolean",
+                    "name": bool_param
+                }))
+            logtunnel_section.add_child(_XmlNode("parameter", children=[_XmlNode("value", text=len(model.userclasses))], attributes={
+                "classPath": "java.lang.Integer",
+                "name": "numClasses"
+            }))
+
+            router_section = logger_node.add_child(
+                _XmlNode("section", attributes={"className": "Router"}))
+            routing_strategy = router_section.add_child(_XmlNode("parameter", attributes={
+                "array": "true",
+                "classPath": "jmt.engine.NetStrategies.RoutingStrategy",
+                "name": "RoutingStrategy"
+            }))
+            for userclass in model.userclasses:
+                routing_strategy.add_child(
+                    _XmlNode("refClass", text=userclass.name))
+                routing_strategy.add_child(_XmlNode("subParameter", attributes={
+                    "classPath": "jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy",
+                    "name": "Random"
+                }))
+
             # Router
             router = node_E.get_child(2)
             # da togliere node_index, si trova
@@ -314,9 +475,9 @@ def bake(model, fill_loggers=False):
                             (model.nodes[source].name, model.nodes[target].name))
                     else:
                         model.connections.append(
-                            (model.nodes[source].name, "LOG_"+model.nodes[source].name+"_"+model.nodes[target].name))
+                            (model.nodes[source].name, "LOG_"+model.nodes[target].name))
                         model.connections.append(
-                            ("LOG_"+model.nodes[source].name+"_"+model.nodes[target].name, model.nodes[target].name))
+                            ("LOG_"+model.nodes[target].name, model.nodes[target].name))
 
     # Qui questione logger
 
@@ -325,6 +486,46 @@ def bake(model, fill_loggers=False):
             "source": connection[0],
             "target": connection[1]}))
 
+    stations_to_be_blocked = [node for node in model.nodes if (
+        isinstance(node, Station) and node.buffer_size > 0)]
+    for node in stations_to_be_blocked:
+        blocking_region = baked_model.add_child(_XmlNode("blockingRegion", attributes={
+            "name": f"{node.name}_BLOCK",
+            "type": "default"
+        }))
+        blocking_region.add_child(
+            _XmlNode("regionNode", attributes={"nodeName": node.name}))
+        blocking_region.add_child(_XmlNode("regionNode", attributes={
+                                  "nodeName": f"LOG_{node.name}"}))
+        blocking_region.add_child(
+            _XmlNode("globalConstraint", attributes={"maxJobs": str(node.buffer_size)}))
+        blocking_region.add_child(
+            _XmlNode("globalMemoryConstraint", attributes={"maxMemory": str(-1)}))
+        for userclass in model.userclasses:
+            blocking_region.add_child(_XmlNode("classConstraint", attributes={
+                "jobClass": userclass.name,
+                "maxJobsPerClass": str(-1)
+            }))
+        for userclass in model.userclasses:
+            blocking_region.add_child(_XmlNode("classMemoryConstraint", attributes={
+                "jobClass": userclass.name,
+                "maxMemoryPerClass": str(-1)
+            }))
+        for userclass in model.userclasses:
+            blocking_region.add_child(_XmlNode("dropRules", attributes={
+                "dropThisClass": "false",
+                "jobClass": userclass.name
+            }))
+        for userclass in model.userclasses:
+            blocking_region.add_child(_XmlNode("classWeight", attributes={
+                "jobClass": userclass.name,
+                "weight": str(1)
+            }))
+        for userclass in model.userclasses:
+            blocking_region.add_child(_XmlNode("classSize", attributes={
+                "jobClass": userclass.name,
+                "size": str(1)  # CHE è??
+            }))
     return baked_model
 
 
@@ -358,7 +559,7 @@ def set_router(model, router, node_index):
                     _XmlNode("subParameter", attributes={
                         "classPath": "java.lang.String",
                         "name": "stationName"},
-                        children=[_XmlNode("value", text=model.nodes[target[0]].name)]))
+                        children=[_XmlNode("value", text=f"LOG_{model.nodes[target[0]].name}")]))
                 empirical_entry.add_child(
                     _XmlNode("subParameter", attributes={
                         "classPath": "java.lang.Double",

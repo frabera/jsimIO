@@ -36,9 +36,11 @@ routing_matrices = [
 model.set_routing(routing_matrices)
 
 # Export and run
-baked_model = bake(model)
+baked_model = bake(model, fill_loggers=True)
 print(ET.tostring(baked_model._element, pretty_print=True).decode())
 
 path = baked_model.write_jsimg()
 ret = baked_model.solve_jsimg(path)
 print(ret)
+
+# %%
