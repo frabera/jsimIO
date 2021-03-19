@@ -23,10 +23,21 @@ class Model:
         self.nodes = []
         self.connections = []
 
-    def set_routing(self, matrices):
+    def set_routing(self, matrices=None):
+        if matrices == None:
+            # number_of_nodes = len(self.nodes)
+            # number_of_classes = len(self.userclasses)
+            # matrices = [[[0] * number_of_nodes] *
+            #             number_of_nodes] * number_of_classes
+            matrices = [[[0 for _ in range(len(self.nodes))] for _ in range(
+                len(self.nodes))] for _ in range(len(self.userclasses))]
+            for node in [node for node in self.nodes if not isinstance(node, Sink)]:
+                for route in node.routes:
+                    matrices[self.userclasses.index(route["userclass"])][self.nodes.index(node)][self.nodes.index(
+                        route["target"])] = route["probability"]
         assert len(matrices) == len(
-            self.userclasses), "The number of matrices must be equal \
-                to the number of customer classes"
+            self.userclasses), "The number of matrices must be equal\
+                 to the number of customer classes"
         #  normalizzare
         self.matrices = matrices
 
@@ -34,9 +45,19 @@ class Model:
 class Node:
     def __init__(self):
         self.classes_referenced = []
+        self.routes = None
+
+    def add_route(self, userclass, target, probability):
+        if self.routes == None:
+            self.routes = []
+        self.routes.append({
+            "userclass": userclass,
+            "target": target,
+            "probability": probability
+        })
 
 
-@dataclass
+@ dataclass
 class OpenClass:
     model: Model
     name: str
@@ -48,7 +69,7 @@ class OpenClass:
         self.model.userclasses.append(self)
 
 
-@dataclass
+@ dataclass
 class ClosedClass:
     model: Model
     name: str
@@ -60,7 +81,7 @@ class ClosedClass:
         self.model.userclasses.append(self)
 
 
-@dataclass
+@ dataclass
 class Station(Node):
     model: Model
     name: str
@@ -78,7 +99,7 @@ class Station(Node):
             {"userclass": userclass, "distribution": distribution})
 
 
-@dataclass
+@ dataclass
 class Source(Node):
     model: Model
     name: str
@@ -88,7 +109,7 @@ class Source(Node):
         super().__init__()
 
 
-@dataclass
+@ dataclass
 class Sink(Node):
     model: Model
     name: str
@@ -98,7 +119,7 @@ class Sink(Node):
         super().__init__()
 
 
-@dataclass
+@ dataclass
 class Fork(Node):
     model: Model
     name: str
@@ -108,7 +129,7 @@ class Fork(Node):
         super().__init__()
 
 
-@dataclass
+@ dataclass
 class Join(Node):
     model: Model
     name: str
@@ -118,7 +139,7 @@ class Join(Node):
         super().__init__()
 
 
-@dataclass
+@ dataclass
 class Logger(Node):
     model: Model
     name: str
@@ -192,7 +213,7 @@ def bake(model, fill_loggers=True):
             queue_section = logger_node.add_child(
                 _XmlNode("section", attributes={"className": "Queue"}))
             size = queue_section.add_child(_XmlNode("parameter", attributes={
-                                           "classPath": "java.lang.Integer", "name": "size"}))
+                "classPath": "java.lang.Integer", "name": "size"}))
             size.add_child(_XmlNode("value", text=-1))
             drop_strategy = queue_section.add_child(_XmlNode("parameter", attributes={
                 "array": "true",
@@ -374,7 +395,7 @@ def bake(model, fill_loggers=True):
             queue_section = logger_node.add_child(
                 _XmlNode("section", attributes={"className": "Queue"}))
             size = queue_section.add_child(_XmlNode("parameter", attributes={
-                                           "classPath": "java.lang.Integer", "name": "size"}))
+                "classPath": "java.lang.Integer", "name": "size"}))
             size.add_child(_XmlNode("value", text=-1))
             drop_strategy = queue_section.add_child(_XmlNode("parameter", attributes={
                 "array": "true",

@@ -55,9 +55,6 @@ class _Station(_Node):  # Actually is a Queue
             # discrepanza tra parameter._children e parameter._element
             server.add_child(service_strategy)
 
-    def set_route():
-        pass
-
 
 class _Source(_Node):
     def __init__(self, model, name):

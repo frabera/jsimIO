@@ -38,3 +38,14 @@ In the root folder there are some examples:
 3. **hybrid_flowshop.py**
   Sample hybrid flow-shop system. Open its jsimg file in the related folder for further details.
   Model of the system: [Gitbook Link](https://virtualfactory.gitbook.io/virtual-learning-factory-toolkit/use-cases/hybrid-flow-shop/hybrid-flow-shop-ontogui)
+
+## Routing
+
+There are two ways to define routing inside the system:
+
+1. **Routing Matrix**
+  List of matrices, passed with `model.set_routing(matrices)`. One matrix per userclass, each row and column index is related to a node, in order of declaration. It is used in all the examples except for `job_shop_noroutematrix.py`
+2. **Node class method**
+  A more explicit way, but it is needed to set each route, for each node, for each class. The node method `node.add_route(class, target_station, probability)`. It is used in `job_shop_noroutematrix.py` example.
+
+In both cases the probabilities are normalized (per row).
