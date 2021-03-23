@@ -27,8 +27,13 @@ class _XmlNode():
     def get_classattributes_asdict(self):
         return {k: v for k, v in self.__dict__.items() if not k.startswith(("_", "model"))}
 
-    def get_child(self, id):
+    def get_child(self, id):  # get last with -1
         return self._children[id]
+
+    def insert_child(self, index, xmlnode_instance):
+        self._children.insert(index, xmlnode_instance)
+        self._element.insert(index, xmlnode_instance._element)
+        return xmlnode_instance
 
     def get_children_xmlelements(self):
         return [child._element for child in self._children]
@@ -45,6 +50,49 @@ class _XmlNode():
         self._attributes.update(attr_dict_cleaned)
         self._element.attrib.update(attr_dict_cleaned)
 
-    # genera elem xml da attributi classe, potrebbe servire se genero xml alla fine
-    def create_element(self):
-        pass
+    def add_subparameter_siblings(self, classPath, name, refClass=None, value=None):
+        if refClass:
+            self.add_child(_XmlNode("refClass", text=refClass))
+        last_child = self.add_child(
+            _SubParameter(classPath, name, value=value))
+        # ! Returns the last child
+        return last_child
+
+
+class _Parameter(_XmlNode):
+    def __init__(self, classPath, name, array=None, value=None):
+        super().__init__("parameter")
+        attributes = {}
+        if array:
+            if array == "true" or array == True:  # non posso mettere is o viene sempre vero
+                attributes["array"] = "true"
+            else:
+                attributes["array"] = array
+        attributes["classPath"] = classPath
+        attributes["name"] = name
+
+        if value:
+            self.add_child(_XmlNode("value", text=value))
+
+        self.set_attributes(attributes)
+
+
+class _SubParameter(_XmlNode):
+    def __init__(self, classPath, name, array=None, value=None, children=None):
+        super().__init__("subParameter")
+        attributes = {}
+        if array:
+            if array == "true" or array == True:  # non posso mettere is o viene sempre vero
+                attributes["array"] = "true"
+            else:
+                attributes["array"] = array
+        attributes["classPath"] = classPath
+        attributes["name"] = name
+
+        if value:
+            self.add_child(_XmlNode("value", text=value))
+        if children:
+            for child in children:
+                self.add_child(child)
+
+        self.set_attributes(attributes)

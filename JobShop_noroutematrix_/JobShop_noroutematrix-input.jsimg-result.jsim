@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<solutions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" logDecimalSeparator="." logDelimiter="," logPath="c:\Users\Francesco\Desktop\jsimIO\JobShop_noroutematrix_20210319-173826" modelDefinitionPath="." modelName="JobShop_noroutematrix" solutionMethod="simulation" xsi:noNamespaceSchemaLocation="SIMmodeloutput.xsd">
-    <measure alfa="0.01" analyzedSamples="15360" class="" discardedSamples="420" lowerLimit="0.745993074169709" maxSamples="1000000" meanValue="0.7672622915152691" measureType="System Throughput" nodeType="" precision="0.03" station="" successful="true" upperLimit="0.7897799281097142"/>
-</solutions>

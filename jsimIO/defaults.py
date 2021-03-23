@@ -15,6 +15,58 @@ class Default:
         "-maxtime": 60
     }
 
+    LoggerOptions = [
+        {
+            "classPath": "java.lang.String",
+            "name": "logfileName",
+            "value": "global.csv"
+        },
+        {
+            "classPath": "java.lang.String",
+            "name": "logfilePath",
+            "value": "logfilePath"
+        },
+        {
+            "classPath": "java.lang.Boolean",
+            "name": "logExecTimestamp",
+            "value": "true"
+        },
+        {
+            "classPath": "java.lang.Boolean",
+            "name": "logLoggerName",
+            "value": "true"
+        },
+        {
+            "classPath": "java.lang.Boolean",
+            "name": "logTimeStamp",
+            "value": "true"
+        },
+        {
+            "classPath": "java.lang.Boolean",
+            "name": "logJobID",
+            "value": "true"
+        },
+        {
+            "classPath": "java.lang.Boolean",
+            "name": "logJobClass",
+            "value": "true"
+        },
+        {
+            "classPath": "java.lang.Boolean",
+            "name": "logTimeSameClass",
+            "value": "true"
+        },
+        {
+            "classPath": "java.lang.Boolean",
+            "name": "logTimeAnyClass",
+            "value": "true"
+        },
+    ]
+
+    MeasureOptions = {
+
+    }
+
 
 class Id:
     class Station:

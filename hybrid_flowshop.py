@@ -16,23 +16,23 @@ m5 = Station(model, "M5", buffer_size=10)
 sink = Sink(model, "Sink")  # 2
 
 # Define customer classes
-part_a = OpenClass(model, "Part A", source, Determ(1))
-part_b = OpenClass(model, "Part B", source, Determ(0.5))
-part_c = OpenClass(model, "Part C", source, Determ(0.8))
+part_a = OpenClass(model, "Part A", source, Dist.Exp(1))
+part_b = OpenClass(model, "Part B", source, Dist.Exp(0.5))
+part_c = OpenClass(model, "Part C", source, Dist.Exp(0.8))
 
 # Set services
-m1.set_service(part_a, Determ(1.1))
-m1.set_service(part_b, Determ(1.3))
-m1.set_service(part_c, Determ(1))
-m2.set_service(part_a, Determ(0.9))
-m2.set_service(part_c, Determ(1.1))
-m3.set_service(part_b, Determ(2.1))
-m4.set_service(part_a, Determ(1.5))
-m4.set_service(part_b, Determ(1.2))
-m4.set_service(part_c, Determ(0.7))
-m5.set_service(part_a, Determ(0.7))
-m5.set_service(part_b, Determ(0.8))
-m5.set_service(part_c, Determ(0.5))
+m1.set_service(part_a, Dist.Exp(1.1))
+m1.set_service(part_b, Dist.Exp(1.3))
+m1.set_service(part_c, Dist.Exp(1))
+m2.set_service(part_a, Dist.Exp(0.9))
+m2.set_service(part_c, Dist.Exp(1.1))
+m3.set_service(part_b, Dist.Exp(2.1))
+m4.set_service(part_a, Dist.Exp(1.5))
+m4.set_service(part_b, Dist.Exp(1.2))
+m4.set_service(part_c, Dist.Exp(0.7))
+m5.set_service(part_a, Dist.Exp(0.7))
+m5.set_service(part_b, Dist.Exp(0.8))
+m5.set_service(part_c, Dist.Exp(0.5))
 
 
 routing_matrices = [
@@ -65,14 +65,14 @@ routing_matrices = [
     ]
 ]
 
-model.set_routing(routing_matrices)
+model.set_routing_matrices(routing_matrices)
+
+model.add_measure()
 
 # Export and run
-baked_model = bake(model)
-print(ET.tostring(baked_model._element, pretty_print=True).decode())
-
-path = baked_model.write_jsimg()
-ret = baked_model.solve_jsimg(path)
+path = model.write_jsimg()
+ret = model.solve_jsimg(path)
 print(ret)
+
 
 # %%

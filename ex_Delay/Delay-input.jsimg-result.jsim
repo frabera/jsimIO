@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<solutions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" logDecimalSeparator="." logDelimiter="," logPath="c:\Users\Francesco\Desktop\jsimIO\Delay_20210323-221751" modelDefinitionPath="." modelName="Delay" solutionMethod="simulation" xsi:noNamespaceSchemaLocation="SIMmodeloutput.xsd">
+    <measure alfa="0.01" analyzedSamples="12800" class="" discardedSamples="5" lowerLimit="1.4811672224928953" maxSamples="1000000" meanValue="1.5191792477684423" measureType="System Throughput" nodeType="" precision="0.03" station="" successful="true" upperLimit="1.5591937105757736"/>
+</solutions>

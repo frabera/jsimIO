@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<solutions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" logDecimalSeparator="." logDelimiter="," logPath="c:\Users\Francesco\Desktop\jsimIO\JobShop_20210323-222643" modelDefinitionPath="." modelName="JobShop" solutionMethod="simulation" xsi:noNamespaceSchemaLocation="SIMmodeloutput.xsd">
+    <measure alfa="0.01" analyzedSamples="20480" class="" discardedSamples="7390" lowerLimit="0.6157292575222422" maxSamples="1000000" meanValue="0.6318823551672428" measureType="System Throughput" nodeType="" precision="0.03" station="" successful="true" upperLimit="0.6489058095108231"/>
+</solutions>

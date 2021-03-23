@@ -1,152 +1,8 @@
-from os.path import join
-from .defaults import Default
-from dataclasses import dataclass
-from .distributions import _Distribution
-# from .strategies import _SchedStrategy
-from .model import _Model
-from .userclasses import _OpenClass, _ClosedClass
-from .nodes import _Station, _Logger, _Source, _Sink
+from .distributions import *
+from .model import *
+from .userclasses import *
+from .nodes import *
 from .xmlnode_superclass import _XmlNode
-
-
-# UTILS
-
-class SchedStrategy:
-    FCFS = "FCFS"
-
-
-class Model:
-    def __init__(self, name, options=Default.ModelOptions):
-        self.name = name
-        self.options = options
-        self.userclasses = []
-        self.nodes = []
-        self.connections = []
-
-    def set_routing(self, matrices=None):
-        if matrices == None:
-            # number_of_nodes = len(self.nodes)
-            # number_of_classes = len(self.userclasses)
-            # matrices = [[[0] * number_of_nodes] *
-            #             number_of_nodes] * number_of_classes
-            matrices = [[[0 for _ in range(len(self.nodes))] for _ in range(
-                len(self.nodes))] for _ in range(len(self.userclasses))]
-            for node in [node for node in self.nodes if not isinstance(node, Sink)]:
-                for route in node.routes:
-                    matrices[self.userclasses.index(route["userclass"])][self.nodes.index(node)][self.nodes.index(
-                        route["target"])] = route["probability"]
-        assert len(matrices) == len(
-            self.userclasses), "The number of matrices must be equal\
-                 to the number of customer classes"
-        #  normalizzare
-        self.matrices = matrices
-
-
-class Node:
-    def __init__(self):
-        self.classes_referenced = []
-        self.routes = None
-
-    def add_route(self, userclass, target, probability):
-        if self.routes == None:
-            self.routes = []
-        self.routes.append({
-            "userclass": userclass,
-            "target": target,
-            "probability": probability
-        })
-
-
-@ dataclass
-class OpenClass:
-    model: Model
-    name: str
-    reference_station: Node
-    distribution: _Distribution
-    priority: int = 0
-
-    def __post_init__(self):
-        self.model.userclasses.append(self)
-
-
-@ dataclass
-class ClosedClass:
-    model: Model
-    name: str
-    customers: int
-    reference_station: Node  # Serve?
-    priority: int = 0
-
-    def __post_init__(self):
-        self.model.userclasses.append(self)
-
-
-@ dataclass
-class Station(Node):
-    model: Model
-    name: str
-    scheduling_strategy: str = SchedStrategy.FCFS  # da cambiare
-    buffer_size: int = -1
-    dropstrategy: str = "BAS blocking"  # da cambiare
-
-    def __post_init__(self):
-        self.model.nodes.append(self)
-        self.service = []
-        super().__init__()
-
-    def set_service(self, userclass, distribution):
-        self.service.append(
-            {"userclass": userclass, "distribution": distribution})
-
-
-@ dataclass
-class Source(Node):
-    model: Model
-    name: str
-
-    def __post_init__(self):
-        self.model.nodes.append(self)
-        super().__init__()
-
-
-@ dataclass
-class Sink(Node):
-    model: Model
-    name: str
-
-    def __post_init__(self):
-        self.model.nodes.append(self)
-        super().__init__()
-
-
-@ dataclass
-class Fork(Node):
-    model: Model
-    name: str
-
-    def __post_init__(self):
-        self.model.nodes.append(self)
-        super().__init__()
-
-
-@ dataclass
-class Join(Node):
-    model: Model
-    name: str
-
-    def __post_init__(self):
-        self.model.nodes.append(self)
-        super().__init__()
-
-
-@ dataclass
-class Logger(Node):
-    model: Model
-    name: str
-
-    def __post_init__(self):
-        self.model.nodes.append(self)
-        super().__init__()
 
 
 def link_classes_and_nodes(model):
@@ -163,18 +19,10 @@ def add_logger(baked_model, node):
 def bake(model, fill_loggers=True):
 
     link_classes_and_nodes(model)
-    baked_model = _Model(model, options=model.options)
+    baked_model = model
 
     # Add userclasses TAGS
-    for userclass in model.userclasses:
-        if isinstance(userclass, OpenClass):
-            baked_model.add_child(_OpenClass(
-                baked_model, userclass.name, userclass.reference_station.name,
-                userclass.distribution, userclass.priority))
-        elif isinstance(userclass, ClosedClass):
-            baked_model.add_child(_ClosedClass(
-                baked_model, userclass.name, userclass.customers,
-                userclass.reference_station.name, userclass.priority))
+    add_userclass_elements(model, baked_model)
 
     # Add nodes TAGs
     for node_index, node in enumerate(model.nodes):
@@ -548,6 +396,18 @@ def bake(model, fill_loggers=True):
                 "size": str(1)  # CHE è??
             }))
     return baked_model
+
+
+def add_userclass_elements(model, baked_model):
+    for userclass in model.userclasses:
+        if isinstance(userclass, OpenClass):
+            baked_model.add_child(_OpenClass(
+                baked_model, userclass.name, userclass.reference_station.name,
+                userclass.distribution, userclass.priority))
+        elif isinstance(userclass, ClosedClass):
+            baked_model.add_child(_ClosedClass(
+                baked_model, userclass.name, userclass.customers,
+                userclass.reference_station.name, userclass.priority))
 
 
 def set_router(model, router, node_index):

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<solutions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" logDecimalSeparator="." logDelimiter="," logPath="c:\Users\Francesco\Desktop\jsimIO\Assembly-simple_20210323-222718" modelDefinitionPath="." modelName="Assembly-simple" solutionMethod="simulation" xsi:noNamespaceSchemaLocation="SIMmodeloutput.xsd">
+    <measure alfa="0.01" analyzedSamples="10240" class="" discardedSamples="0" lowerLimit="0.9753516601151193" maxSamples="1000000" meanValue="1.00022635459509" measureType="System Throughput" nodeType="" precision="0.03" station="" successful="true" upperLimit="1.0264030278664318"/>
+</solutions>

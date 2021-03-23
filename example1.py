@@ -13,12 +13,12 @@ sink = Sink(model, "Sink")  # 2
 queue1 = Station(model, "M1")  # 3
 
 # Define customer classes
-class1 = OpenClass(model, "Class1", source, Exp(0.4))
-class2 = OpenClass(model, "Class2", source, Exp(0.9))
+class1 = OpenClass(model, "Class1", source, Dist.Exp(0.4))
+class2 = OpenClass(model, "Class2", source, Dist.Determ(0.9))
 
 # Set services
-queue1.set_service(class1, Exp(0.1))
-queue1.set_service(class2, Normal(0, 1))
+queue1.set_service(class1, Dist.Exp(0.1))
+queue1.set_service(class2, Dist.Determ(0.1))
 
 routing_matrices = [
     [  # class 1
@@ -33,14 +33,16 @@ routing_matrices = [
     ]
 ]
 
-model.set_routing(routing_matrices)
+model.set_routing_matrices(routing_matrices)
+
+model.add_measure()
 
 # Export and run
-baked_model = bake(model, fill_loggers=True)
-print(ET.tostring(baked_model._element, pretty_print=True).decode())
+# baked_model = bake(model, fill_loggers=True)
 
-path = baked_model.write_jsimg()
-ret = baked_model.solve_jsimg(path)
+path = model.write_jsimg()
+ret = model.solve_jsimg(path)
 print(ret)
+
 
 # %%
