@@ -65,6 +65,22 @@ class Dist:
             self.lambda_1 = lambda_1
             self.lambda_2 = lambda_2
 
+            self.add_child(_SubParameter(
+                "jmt.engine.random.HyperExp",
+                "Hyperexponential"
+            ))
+            self.add_child(_SubParameter(
+                "jmt.engine.random.HyperExpPar",
+                "distrPar",
+                children=[
+                    _SubParameter("java.lang.Double", "p", value=self.p),
+                    _SubParameter("java.lang.Double", "lambda1",
+                                  value=self.lambda_1),
+                    _SubParameter("java.lang.Double", "lambda2",
+                                  value=self.lambda_2)
+                ]
+            ))
+
     class Uniform(_Distribution):
         def __init__(self, min_, max_):
             super().__init__()
@@ -72,26 +88,18 @@ class Dist:
             self.max_ = max_
             self.min_ = min_
 
-        def get_elements_list(self):
-            elements = []
-            elements.append(ET.Element("subParameter",
-                                       classPath="jmt.engine.random.Uniform",
-                                       name="Uniform"))
-            el2 = ET.Element("subParameter",
-                             classPath="jmt.engine.random.UniformPar",
-                             name="distrPar")
-            elements.append(el2)
-            el2a = ET.SubElement(el2, "subParameter",
-                                 classPath="java.lang.Double",
-                                 name="min")
-            el2a1 = ET.SubElement(el2a, "value")
-            el2a1.text = str(float(self.min_))
-            el2b = ET.SubElement(el2, "subParameter",
-                                 classPath="java.lang.Double",
-                                 name="max")
-            el2b1 = ET.SubElement(el2b, "value")
-            el2b1.text = str(float(self.max_))
-            return elements
+            self.add_child(_SubParameter(
+                "jmt.engine.random.Uniform",
+                "Uniform"
+            ))
+            self.add_child(_SubParameter(
+                "jmt.engine.random.UniformPar",
+                "distrPar",
+                children=[
+                    _SubParameter("java.lang.Double", "min", value=self.min_),
+                    _SubParameter("java.lang.Double", "max", value=self.max_)
+                ]
+            ))
 
     class Normal(_Distribution):
         def __init__(self, mean, stdev):
@@ -100,26 +108,19 @@ class Dist:
             self.mean = mean
             self.stdev = stdev
 
-        def get_elements_list(self):
-            elements = []
-            elements.append(ET.Element("subParameter",
-                                       classPath="jmt.engine.random.Normal",
-                                       name="Normal"))
-            el2 = ET.Element("subParameter",
-                             classPath="jmt.engine.random.NormalPar",
-                             name="distrPar")
-            elements.append(el2)
-            el2a = ET.SubElement(el2, "subParameter",
-                                 classPath="java.lang.Double",
-                                 name="mean")
-            el2a1 = ET.SubElement(el2a, "value")
-            el2a1.text = str(float(self.mean))
-            el2b = ET.SubElement(el2, "subParameter",
-                                 classPath="java.lang.Double",
-                                 name="standardDeviation")
-            el2b1 = ET.SubElement(el2b, "value")
-            el2b1.text = str(float(self.stdev))
-            return elements
+            self.add_child(_SubParameter(
+                "jmt.engine.random.Normal",
+                "Normal"
+            ))
+            self.add_child(_SubParameter(
+                "jmt.engine.random.NormalPar",
+                "distrPar",
+                children=[
+                    _SubParameter("java.lang.Double", "mean", value=self.mean),
+                    _SubParameter("java.lang.Double",
+                                  "standardDeviation", value=self.stdev)
+                ]
+            ))
 
     class Gamma(_Distribution):
         def __init__(self, alpha, theta):
@@ -128,26 +129,19 @@ class Dist:
             self.alpha = alpha
             self.theta = theta
 
-        def get_elements_list(self):
-            elements = []
-            elements.append(ET.Element("subParameter",
-                                       classPath="jmt.engine.random.GammaDistr",
-                                       name="Gamma"))
-            el2 = ET.Element("subParameter",
-                             classPath="jmt.engine.random.GammaDistrPar",
-                             name="distrPar")
-            elements.append(el2)
-            el2a = ET.SubElement(el2, "subParameter",
-                                 classPath="java.lang.Double",
-                                 name="alpha")
-            el2a1 = ET.SubElement(el2a, "value")
-            el2a1.text = str(float(self.alpha))
-            el2b = ET.SubElement(el2, "subParameter",
-                                 classPath="java.lang.Double",
-                                 name="beta")
-            el2b1 = ET.SubElement(el2b, "value")
-            el2b1.text = str(float(self.theta))
-            return elements
+            self.add_child(_SubParameter(
+                "jmt.engine.random.GammaDistr",
+                "Gamma"
+            ))
+            self.add_child(_SubParameter(
+                "jmt.engine.random.GammaDistrPar",
+                "distrPar",
+                children=[
+                    _SubParameter("java.lang.Double",
+                                  "alpha", value=self.alpha),
+                    _SubParameter("java.lang.Double", "beta", value=self.theta)
+                ]
+            ))
 
     class Erlang(_Distribution):
         def __init__(self, lambda_, k):
@@ -156,26 +150,19 @@ class Dist:
             self.lambda_ = lambda_
             self.k = k
 
-        def get_elements_list(self):
-            elements = []
-            elements.append(ET.Element("subParameter",
-                                       classPath="jmt.engine.random.Erlang",
-                                       name="Erlang"))
-            el2 = ET.Element("subParameter",
-                             classPath="jmt.engine.random.ErlangPar",
-                             name="distrPar")
-            elements.append(el2)
-            el2a = ET.SubElement(el2, "subParameter",
-                                 classPath="java.lang.Double",
-                                 name="alpha")
-            el2a1 = ET.SubElement(el2a, "value")
-            el2a1.text = str(float(self.lambda_))
-            el2b = ET.SubElement(el2, "subParameter",
-                                 classPath="java.lang.Long",
-                                 name="r")
-            el2b1 = ET.SubElement(el2b, "value")
-            el2b1.text = str(int(self.k))
-            return elements
+            self.add_child(_SubParameter(
+                "jmt.engine.random.Erlang",
+                "Erlang"
+            ))
+            self.add_child(_SubParameter(
+                "jmt.engine.random.ErlangPar",
+                "distrPar",
+                children=[
+                    _SubParameter("java.lang.Double", "alpha",
+                                  value=self.lambda_),
+                    _SubParameter("java.lang.Double", "r", value=self.k)
+                ]
+            ))
 
     class Coxian(_Distribution):
         def __init__(self, lambda_0, lambda_1, p0):
@@ -185,6 +172,22 @@ class Dist:
             self.lambda_1 = lambda_1
             self.p0 = p0
 
+            self.add_child(_SubParameter(
+                "jmt.engine.random.CoxianDistr",
+                "Coxian"
+            ))
+            self.add_child(_SubParameter(
+                "jmt.engine.random.CoxianPar",
+                "distrPar",
+                children=[
+                    _SubParameter("java.lang.Double", "lambda0",
+                                  value=self.lambda_0),
+                    _SubParameter("java.lang.Double", "lambda1",
+                                  value=self.lambda_1),
+                    _SubParameter("java.lang.Double", "phi0", value=self.p0)
+                ]
+            ))
+
     class Pareto(_Distribution):
         def __init__(self, alpha, k):
             super().__init__()
@@ -192,26 +195,19 @@ class Dist:
             self.alpha = alpha
             self.k = k
 
-        def get_elements_list(self):
-            elements = []
-            elements.append(ET.Element("subParameter",
-                                       classPath="jmt.engine.random.Pareto",
-                                       name="Pareto"))
-            el2 = ET.Element("subParameter",
-                             classPath="jmt.engine.random.ParetoPar",
-                             name="distrPar")
-            elements.append(el2)
-            el2a = ET.SubElement(el2, "subParameter",
-                                 classPath="java.lang.Double",
-                                 name="alpha")
-            el2a1 = ET.SubElement(el2a, "value")
-            el2a1.text = str(float(self.alpha))
-            el2b = ET.SubElement(el2, "subParameter",
-                                 classPath="java.lang.Double",
-                                 name="k")
-            el2b1 = ET.SubElement(el2b, "value")
-            el2b1.text = str(float(self.k))
-            return elements
+            self.add_child(_SubParameter(
+                "jmt.engine.random.Pareto",
+                "Pareto"
+            ))
+            self.add_child(_SubParameter(
+                "jmt.engine.random.ParetoPar",
+                "distrPar",
+                children=[
+                    _SubParameter("java.lang.Double", "alpha",
+                                  value=self.alpha),
+                    _SubParameter("java.lang.Double", "k", value=self.k)
+                ]
+            ))
 
     class PhaseType(_Distribution):
         def __init__(self, initial_prob_vector, transition_matrix):
