@@ -44,6 +44,7 @@
 
 - [~] Set performance indices
 - [X] Fill connections with Loggers
+- [X] Finite-capacity region blocks containing logger+station if limited buffer capacity
 - [ ] Open in Jsimg
 - [X] Export
 - [X] Run simulation

@@ -26,6 +26,8 @@ And contains:
 
   A `.csv` file containing the logs of all the logger stations in the model. The name format includes the real station related to the logger (each logger precedes its related station).
 
+  Logger station name format: `LOG_RelatedStationName`
+
 ## Examples
 
 In the root folder there are some examples:
@@ -43,9 +45,13 @@ In the root folder there are some examples:
 
 There are two ways to define routing inside the system:
 
-1. **Routing Matrix**
+* **Routing Matrix**
+
   List of matrices, passed with `model.set_routing(matrices)`. One matrix per userclass, each row and column index is related to a node, in order of declaration. It is used in all the examples except for `job_shop_noroutematrix.py`
-2. **Node class method**
-  A more explicit way, but it is needed to set each route, for each node, for each class. The node method `node.add_route(class, target_station, probability)`. It is used in `job_shop_noroutematrix.py` example.
+
+* **Node class method**
+
+  A more explicit way, but it is needed to set each route, for each node, for each class.
+  The node method is `node.add_route(class, target_station, probability)`. It is used in `job_shop_noroutematrix.py` and the assembly processes examples.
 
 In both cases the probabilities are normalized (per row).
