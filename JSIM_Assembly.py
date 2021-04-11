@@ -268,7 +268,7 @@ model.add_measure()
 # Export and run
 
 path = model.write_jsimg()
-ret = model.solve_jsimg()
+ret = model.solve_jsimg(max_memory_mb=3000)
 print(ret)
 
 if ret.stderr:
