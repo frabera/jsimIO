@@ -7,7 +7,9 @@ class Default:
         "logPath": "",
         "maxEvents": "-1",
         "maxSamples": "1000000",
-        "polling": "1.0"
+        "polling": "1.0",
+        "maxSimulated": "-1",
+        "maxTime": "-1"
     }
 
     SimulationOptions = {
