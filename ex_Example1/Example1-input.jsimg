@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='ISO-8859-1' standalone='no'?>
 <archive xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Example1-input.jsimg" xsi:noNamespaceSchemaLocation="Archive.xsd">
-  <sim name="Example1" disableStatisticStop="false" logDecimalSeparator="." logDelimiter="," logReplaceMode="0" logPath="c:\Users\Francesco\Desktop\jsimIO\Example1_20210323-220134" maxEvents="-1" maxSamples="1000000" polling="1.0" xsi:noNamespaceSchemaLocation="SIMmodeldefinition.xsd">
+  <sim name="Example1" disableStatisticStop="false" logDecimalSeparator="." logDelimiter="," logReplaceMode="0" logPath="c:\Users\Francesco\Desktop\jsimIO\Example1_20210412-065543" maxEvents="-1" maxSamples="1000000" polling="1.0" maxSimulated="-1" maxTime="-1" xsi:noNamespaceSchemaLocation="SIMmodeldefinition.xsd">
     <userClass name="Class1" type="open" priority="0" referenceSource="Source"/>
     <userClass name="Class2" type="open" priority="0" referenceSource="Source"/>
     <node name="Source">
@@ -62,9 +62,31 @@
       <section className="JobSink"/>
     </node>
     <node name="M1">
-      <section className="Delay">
-        <parameter classPath="java.lang.Integer" name="maxJobs">
+      <section className="Queue">
+        <parameter classPath="java.lang.Integer" name="size">
           <value>-1</value>
+        </parameter>
+        <parameter array="true" classPath="java.lang.String" name="dropStrategies">
+          <refClass>Class1</refClass>
+          <subParameter classPath="java.lang.String" name="dropStrategy">
+            <value>BAS blocking</value>
+          </subParameter>
+          <refClass>Class2</refClass>
+          <subParameter classPath="java.lang.String" name="dropStrategy">
+            <value>BAS blocking</value>
+          </subParameter>
+        </parameter>
+        <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
+        <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy">
+          <refClass>Class1</refClass>
+          <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+          <refClass>Class2</refClass>
+          <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+        </parameter>
+      </section>
+      <section className="Server">
+        <parameter classPath="java.lang.Integer" name="maxJobs">
+          <value>1</value>
         </parameter>
         <parameter array="true" classPath="java.lang.Integer" name="numberOfVisits">
           <refClass>Class1</refClass>
@@ -159,7 +181,7 @@
           <value>c:\Users\Francesco\Desktop\jsimIO\Example1</value>
         </parameter>
         <parameter classPath="java.lang.Boolean" name="logExecTimestamp">
-          <value>true</value>
+          <value>false</value>
         </parameter>
         <parameter classPath="java.lang.Boolean" name="logLoggerName">
           <value>true</value>
@@ -223,7 +245,7 @@
           <value>c:\Users\Francesco\Desktop\jsimIO\Example1</value>
         </parameter>
         <parameter classPath="java.lang.Boolean" name="logExecTimestamp">
-          <value>true</value>
+          <value>false</value>
         </parameter>
         <parameter classPath="java.lang.Boolean" name="logLoggerName">
           <value>true</value>

@@ -31,7 +31,7 @@ class Default:
         {
             "classPath": "java.lang.Boolean",
             "name": "logExecTimestamp",
-            "value": "true"
+            "value": "false"
         },
         {
             "classPath": "java.lang.Boolean",
