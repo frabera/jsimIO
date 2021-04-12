@@ -128,7 +128,7 @@ class Model(_XmlNode):
                    standalone=False, pretty_print=True)
         return self.filepath  # Non necessario
 
-    def solve_jsimg(self, path=None, max_memory_mb=-1, seed=1234):
+    def solve_jsimg(self, path=None, max_memory_mb=-1, seed=None):
         if not path:
             path = self.filepath
 
@@ -138,7 +138,8 @@ class Model(_XmlNode):
                 f"-Xmx{max_memory_mb}m" if max_memory_mb != -1 else "",
                 "-cp", r"jsimIO\JMT.jar",
                 "jmt.commandline.Jmt", "sim", path,
-                "-seed", str(seed)
+                "-seed" if seed else "",
+                str(seed) if seed else ""
                 # "--illegal-access=permit"
             ], capture_output=True)
 
