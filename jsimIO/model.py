@@ -131,17 +131,27 @@ class Model(_XmlNode):
     def solve_jsimg(self, path=None, max_memory_mb=-1, seed=None):
         if not path:
             path = self.filepath
-
-        ret = subprocess.run(
-            [
-                "java",
-                f"-Xmx{max_memory_mb}m" if max_memory_mb != -1 else "",
-                "-cp", r"jsimIO\JMT.jar",
-                "jmt.commandline.Jmt", "sim", path,
-                "-seed" if seed else "",
-                str(seed) if seed else ""
-                # "--illegal-access=permit"
-            ], capture_output=True)
+        if max_memory_mb == -1:
+            ret = subprocess.run(
+                [
+                    "java",
+                    "-cp", r"jsimIO\JMT.jar",
+                    "jmt.commandline.Jmt", "sim", path,
+                    "-seed" if seed else "",
+                    str(seed) if seed else ""
+                    # "--illegal-access=permit"
+                ], capture_output=True)
+        else:
+            ret = subprocess.run(
+                [
+                    "java",
+                    f"-Xmx{max_memory_mb}m",
+                    "-cp", r"jsimIO\JMT.jar",
+                    "jmt.commandline.Jmt", "sim", path,
+                    "-seed" if seed else "",
+                    str(seed) if seed else ""
+                    # "--illegal-access=permit"
+                ], capture_output=True)
 
         if ret.stderr.startswith(b"[Error]"):
             print(ret.stderr.decode())
