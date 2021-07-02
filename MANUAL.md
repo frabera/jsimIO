@@ -48,7 +48,7 @@ Station(Model: model,
         SchedStrategy: scheduling_strategy=SchedStrategy.FCFS,
         int: buffer_size=-1,
         int: max_jobs=1,
-        DropStrategy: drop_strategy.BAS_BLOCKING)
+        DropStrategy: drop_strategy=DropStrategy.BAS_BLOCKING)
 ```
 
 The default value for the scheduling strategy is First Come First Served (FCFS) and the default Drop Strategy is BAS_BLOCKING.
@@ -69,7 +69,7 @@ Fork(Model: model,
      str: forked_class_NameString
      SchedStrategy; scheduling_strategy=SchedStrategy.FCFS,
      int: buffer_size=-1,
-     DropStrategy: drop_strategy.BAS_BLOCKING)
+     DropStrategy: drop_strategy= DropStrategy.BAS_BLOCKING)
 ```
 
 **Note**: Please mind that in the fork instantiation it is required, differently from the other classes, to input the forked userclass variable with its *string name* and **not with the variable itself**. This is required since during the fork instantiation the forked user class is not yet defined (refer to the objects definition sequence).

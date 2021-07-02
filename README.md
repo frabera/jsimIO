@@ -1,5 +1,8 @@
 # jsimIO
 
+## Manual
+
+For references about available classes and objects, refer to the [MANUAL](MANUAL.md).
 ## JMT.jar executable
 
 Downlad the [JMT standalone executable](http://sourceforge.net/projects/jmt/files/jmt/JMT-1.1.0/JMT-singlejar-1.1.0.jar/download), rename it `JMT.jar` and place it in `jsimIO` folder _(Check the `JMT.jar_GOES_HERE` placeholder)_.
