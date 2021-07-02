@@ -2,7 +2,7 @@
 
 ## User classes
 
-- [x] Open
+- [X] Open
 - [~] Closed
 
 ## Sections
@@ -11,29 +11,29 @@
 
 ## Nodes
 
-- [x] Source
-- [x] Sink
-- [x] Station (Queue)
-- [x] Logger
-- [x] Delay
+- [X] Source
+- [X] Sink
+- [X] Station (Queue)
+- [X] Logger
+- [X] Delay
 - [ ] Router
-- [x] Fork
-- [x] Join
+- [X] Fork
+- [X] Join
 - [ ] Class Switcher
 - [ ] Semaphore
 - [ ] Scaler
 
 ## Distributions
 
-- [x] Deterministic
-- [x] Exponential
+- [X] Deterministic
+- [X] Exponential
 - [X] Hyperexponential
-- [x] Uniform
-- [x] Normal
-- [x] Gamma
-- [x] Erlang
+- [X] Uniform
+- [X] Normal
+- [X] Gamma
+- [X] Erlang
 - [X] Coxian
-- [x] Pareto
+- [X] Pareto
 - [ ] Phase-type
 - [ ] Burst (General)
 - [ ] Burst (MAP)
