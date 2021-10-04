@@ -135,7 +135,7 @@ class Model(_XmlNode):
             ret = subprocess.run(
                 [
                     "java",
-                    "-cp", r"jsimIO\JMT.jar",
+                    "-cp", os.path.join("jsimIO", "JMT.jar"),
                     "jmt.commandline.Jmt", "sim", path,
                     "-seed" if seed else "",
                     str(seed) if seed else ""
@@ -146,7 +146,7 @@ class Model(_XmlNode):
                 [
                     "java",
                     f"-Xmx{max_memory_mb}m",
-                    "-cp", r"jsimIO\JMT.jar",
+                    "-cp", os.path.join("jsimIO", "JMT.jar"),
                     "jmt.commandline.Jmt", "sim", path,
                     "-seed" if seed else "",
                     str(seed) if seed else ""
