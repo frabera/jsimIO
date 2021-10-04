@@ -1,7 +1,5 @@
 # jsimIO
 
-trial dev
-
 ## Manual
 
 For references about available classes and objects, refer to the [MANUAL](MANUAL.md).

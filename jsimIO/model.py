@@ -128,14 +128,16 @@ class Model(_XmlNode):
                    standalone=False, pretty_print=True)
         return self.filepath  # Non necessario
 
-    def solve_jsimg(self, path=None, max_memory_mb=-1, seed=None):
+    def solve_jsimg(self, path=None, max_memory_mb=-1, seed=None, jmt_path=None):
         if not path:
             path = self.filepath
+        if not jmt_path:
+            jmt_path = os.path.join("jsimIO", "JMT.jar")
         if max_memory_mb == -1:
             ret = subprocess.run(
                 [
                     "java",
-                    "-cp", os.path.join("jsimIO", "JMT.jar"),
+                    "-cp", jmt_path,
                     "jmt.commandline.Jmt", "sim", path,
                     "-seed" if seed else "",
                     str(seed) if seed else ""
@@ -146,7 +148,7 @@ class Model(_XmlNode):
                 [
                     "java",
                     f"-Xmx{max_memory_mb}m",
-                    "-cp", os.path.join("jsimIO", "JMT.jar"),
+                    "-cp", jmt_path,
                     "jmt.commandline.Jmt", "sim", path,
                     "-seed" if seed else "",
                     str(seed) if seed else ""
